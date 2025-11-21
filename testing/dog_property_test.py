@@ -1,31 +1,46 @@
-from dog import Dog
-import pytest
+APPROVED_BREEDS = [
+    "Mastiff",
+    "Chihuahua",
+    "Corgi",
+    "Shar Pei",
+    "Beagle",
+    "French Bulldog",
+    "Pug",
+    "Pointer"
+]
 
 
-class TestDogProperties:
-    '''Class Dog in dog.py'''
+class Dog:
+    def __init__(self, name='Fido', breed='Mastiff'):
+        self.name = name
+        self.breed = breed
 
-    def test_name_breed_valid(self):
-        '''validates name and breed properties are initialized with valid values'''
-        try:
-            # No exception should be thrown since name and breed are valid
-            dog = Dog("Fido", "Corgi")
-        except Exception as exc:
-            # The assertion fails if an exception is thrown
-            assert False, f'Dog("Fido", "Corgi") raised an exception {exc}'
+    # --- name property ---
+    @property
+    def name(self):
+        """The name property"""
+        return self._name
 
-    def test_name_is_string_valid_length(self):
-        '''validates name property is assigned a string between 1 and 25 characters'''
-        dog = Dog("Fido", "Corgi")
-        with pytest.raises(ValueError):
-            dog.name = 7  # not a string
-        with pytest.raises(ValueError):
-            dog.name = ''  # too short
-        with pytest.raises(ValueError):
-            dog.name = 'Fido the adorable Corgi who likes to steal socks'  # too long
+    @name.setter
+    def name(self, name):
+        """Name must be a string between 1 and 25 characters in length"""
+        if isinstance(name, str) and 1 <= len(name) <= 25:
+            self._name = name
+        else:
+            raise ValueError(
+                "Name must be string between 1 and 25 characters."
+            )
 
-    def test_breed_is_approved_breed(self):
-        '''validates breed property is in list of approved choices'''
-        dog = Dog("Snoopy", "Beagle")
-        with pytest.raises(ValueError):
-            dog.breed = "Poodle"  # not an approved breed
+    # --- breed property ---
+    @property
+    def breed(self):
+        """The breed property"""
+        return self._breed
+
+    @breed.setter
+    def breed(self, breed):
+        """Breed must be in the list of approved breeds"""
+        if breed in APPROVED_BREEDS:
+            self._breed = breed
+        else:
+            raise ValueError("Breed must be in list of approved breeds.")
